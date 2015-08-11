@@ -19,13 +19,13 @@ public class Graph : MonoBehaviour
         int nodeCount = 0;
         for (float y = YGridBounds; y >= 0; y -= GridInterval)
         {
-            for (float x = XGridBounds; x >= 0 ; x -= GridInterval)
+            for (float x = XGridBounds; x >= 0; x -= GridInterval)
             {
                 for (float z = ZGridBounds; z >= 0; z -= GridInterval)
                 {
                     nodeCount++;
                     GameObject tempObject =
-                        (GameObject) Instantiate(WaypointPrefab, new Vector3(x, y, z), Quaternion.identity);
+                        (GameObject)Instantiate(WaypointPrefab, new Vector3(x, y, z) + transform.position, Quaternion.identity);
                     tempObject.name = "node_" + nodeCount;
                     tempObject.transform.parent = gameObject.transform;
                 }
