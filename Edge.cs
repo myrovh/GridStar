@@ -8,6 +8,11 @@ public class Edge : MonoBehaviour
 
     public bool isColliding;
 
+    public void Update()
+    {
+        CheckCollision();
+    }
+
     public void SetConnections(GameObject first, GameObject second)
     {
         connectionFirst = first;
@@ -23,9 +28,24 @@ public class Edge : MonoBehaviour
         return false;
     }
 
-    void OnDrawGizmosSelected()
+    public void CheckCollision()
     {
-        Gizmos.color = Color.green;
+        //If collision
+        bool forwardTest = Physics.Linecast(connectionFirst.transform.position, connectionSecond.transform.position);
+        bool backwardTest = Physics.Linecast(connectionSecond.transform.position, connectionFirst.transform.position);
+        if (forwardTest || backwardTest)
+        {
+            isColliding = true;
+        }
+        else
+        {
+            isColliding = false;
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = isColliding ? Color.blue : Color.green;
         Gizmos.DrawLine(connectionFirst.transform.position, connectionSecond.transform.position);
     }
 }
