@@ -5,53 +5,35 @@ using System.Collections.Generic;
 
 public class Node : MonoBehaviour
 {
-    public List<GameObject> EdgeListAll = new List<GameObject>();
+    public List<Edge> EdgeListAll = new List<Edge>();
+    public List<Edge> EdgeListShort = new List<Edge>(); 
 
     public float GizmoDrawRadius = 0.5f;
 
-    /* Collider method of edge connections
-    public float ColliderRadius = 1.1f;
-    public string targetTag = "";
-    public List<Node> objectsInRange;
-    void Start()
+    void Update()
     {
-        SphereCollider c = gameObject.AddComponent<SphereCollider>();
-        c.radius = ColliderRadius;
-        c.isTrigger = true;
+        CullEdges();
     }
 
-    void OnTriggerEnter(Collider c)
+    public void CullEdges()
     {
-        if (c.tag == targetTag)
+        EdgeListShort.Clear();
+
+        foreach (Edge e in EdgeListAll)
         {
-            if (c.GetComponent<Node>() != null)
+            if (!e.isColliding)
             {
-                objectsInRange.Add(c.GetComponent<Node>());
-            }
-            else
-            {
-                Debug.LogWarning("Tagged Object " + c.name + " does not have a node component");
+                EdgeListShort.Add(e);
             }
         }
     }
-
-    void OnTriggerExit(Collider c)
-    {
-        if (c.tag == targetTag)
-        {
-            if (c.GetComponent<Node>() != null)
-            {
-                objectsInRange.Remove(c.GetComponent<Node>());
-            }
-        }
-    }
-    */
 
     public void AddEdge(GameObject e)
     {
-        if (!EdgeListAll.Contains(e))
+        Edge eScript = e.GetComponent<Edge>();
+        if (!EdgeListAll.Contains(eScript))
         {
-            EdgeListAll.Add(e);
+            EdgeListAll.Add(eScript);
         }
     }
 
