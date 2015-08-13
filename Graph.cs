@@ -20,6 +20,8 @@ public class Graph : MonoBehaviour
         BuildGraph();
     }
 
+    #region Graph Generation
+
     public void BuildGraph()
     {
         CleanOldGraph();
@@ -33,7 +35,8 @@ public class Graph : MonoBehaviour
                 {
                     nodeCount++;
                     GameObject tempObject =
-                        (GameObject)Instantiate(NodePrefab, new Vector3(x, y, z) + transform.position, Quaternion.identity);
+                        (GameObject)
+                            Instantiate(NodePrefab, new Vector3(x, y, z) + transform.position, Quaternion.identity);
                     tempObject.name = "node_" + nodeCount;
                     tempObject.transform.parent = gameObject.transform;
                     NodeList.Add(tempObject);
@@ -57,7 +60,9 @@ public class Graph : MonoBehaviour
                 if (nodeDistance.magnitude <= GridInterval && CheckDuplicateEdge(first, other))
                 {
                     edgeCount++;
-                    GameObject tempObject = (GameObject) Instantiate(EdgePrefab, first.transform.position, Quaternion.identity); //Generate edge from prefab
+                    GameObject tempObject =
+                        (GameObject) Instantiate(EdgePrefab, first.transform.position, Quaternion.identity);
+                    //Generate edge from prefab
                     tempObject.transform.parent = gameObject.transform; //Set parent of edge to graph
                     Edge edgeScript = tempObject.GetComponent<Edge>(); //Get edge script
                     edgeScript.SetConnections(first, other); //Assign references to first and second node
@@ -100,9 +105,29 @@ public class Graph : MonoBehaviour
         }
     }
 
+    #endregion
+
+    public Node GetNearestNode(Vector3 position)
+    {
+        Node nearest = null;
+
+        foreach (var n in NodeList)
+        {
+            if ((nearest == null ||
+                 (nearest.gameObject.transform.position - position).sqrMagnitude >
+                 (n.gameObject.transform.position - position).sqrMagnitude))
+            {
+                nearest = n.GetComponent<Node>();
+            }
+        }
+
+        return nearest;
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + new Vector3(XGridBounds / 2.0f, YGridBounds / 2.0f, ZGridBounds / 2.0f), new Vector3(XGridBounds, YGridBounds, ZGridBounds));
+        Gizmos.DrawWireCube(transform.position + new Vector3(XGridBounds/2.0f, YGridBounds/2.0f, ZGridBounds/2.0f),
+            new Vector3(XGridBounds, YGridBounds, ZGridBounds));
     }
 }
